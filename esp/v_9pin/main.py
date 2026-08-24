@@ -39,17 +39,17 @@ def wifi_connect():
     print("Error, couldn't connect to the wifi.")
     return
 
-def set_color_led1(r_val, g_val, b_val):
+def set_color(r_val, g_val, b_val):
     r_ns = int((r_val / 255) * 1_000_000)
     g_ns = int((g_val / 255) * 1_000_000)
     b_ns = int((b_val / 255) * 1_000_000)
 
-    r1.duty_ns(r_ns)
-    g1.duty_ns(g_ns)
-    b1.duty_ns(b_ns)
+    for led in r_leds: led.duty_ns(r_ns)
+    for led in g_leds: led.duty_ns(g_ns)
+    for led in b_leds: led.duty_ns(b_ns)
 
 wifi_connect()
-set_color_led1(0, 0, 0)
+set_color(0, 0, 0)
 
 # --- setting up the http server 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -72,7 +72,7 @@ while True:
             b = int(b[2:])
             print(r, g, b) 
 
-            set_color_led1(r, g, b)
+            set_color(r, g, b)
             
         except Exception as e:
             print("Error receiving the data:", e)
