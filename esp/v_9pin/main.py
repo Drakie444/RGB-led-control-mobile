@@ -10,19 +10,17 @@ r1 = PWM(Pin(16), freq=1000)
 g1 = PWM(Pin(17), freq=1000)
 b1 = PWM(Pin(18), freq=1000)
 
-led1 = [r1, g1, b1]
+r2 = PWM(Pin(19), freq=1000)
+g2 = PWM(Pin(21), freq=1000)
+b2 = PWM(Pin(22), freq=1000)
 
-r2 = Pin(19, Pin.OUT)
-g2 = Pin(21, Pin.OUT)
-b2 = Pin(22, Pin.OUT)
+r3 = PWM(Pin(25), freq=1000)
+g3 = PWM(Pin(26), freq=1000)
+b3 = PWM(Pin(27), freq=1000)
 
-led2 = [r2, g2, b2]
-
-r3 = Pin(25, Pin.OUT)
-g3 = Pin(26, Pin.OUT)
-b3 = Pin(27, Pin.OUT)
-
-led3 = [r3, g3, b3]
+r_leds = [r1, r2, r3]
+g_leds = [g1, g2, g3]
+b_leds = [b1, b2, b3] 
 
 def wifi_connect():
     wlan.active(False)

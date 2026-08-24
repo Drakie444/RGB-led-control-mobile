@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'esp_service.dart';
 
 
@@ -13,10 +14,14 @@ class LedControls extends StatefulWidget {
 
 class _LedControlsState extends State<LedControls> {
   final espService = EspService(dotenv.env['ESP_IP']!);
+  Color pickerColor = Colors.red;
 
-  double r=0, g=0, b=0;
-  void _updateEsp(){
-    espService.sendRgb(r.toInt(), g.toInt(), b.toInt());
+  void _updateEsp(Color color){
+    int r = (color.r * 255).round();
+    int g = (color.g * 255).round();
+    int b = (color.b * 255).round();
+
+    espService.sendRgb(r, g, b);
   }
 
   @override
@@ -24,13 +29,29 @@ class _LedControlsState extends State<LedControls> {
     return Scaffold(
       appBar: AppBar(title: const Text('LED Controls')),
       body: Center(
-        child: Slider(
-          value: r, 
-          min: 0,
-          max: 255, 
-          onChanged: (val) => setState(() => r = val), 
-          onChangeEnd: (_) => _updateEsp(),
-        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HueRingPicker(pickerColor: pickerColor, onColorChanged: (Color color) {
+              setState(() => pickerColor = color);
+            },
+            enableAlpha: false,
+            displayThumbColor: true,
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: pickerColor,
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10)
+              ),
+              onPressed: () => _updateEsp(pickerColor),
+              child: const Text(
+                "Set color",
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ), 
+            ),
+          ],
+        )
       ),
     );
   }
